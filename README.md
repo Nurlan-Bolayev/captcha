@@ -1,7 +1,7 @@
 # Captcha
 
 1. cd folder
-2. git clone [Nurlan-Bolayev/nmap_py](https://github.com/Nurlan-Bolayev/captcha.git)
+2. git clone [Nurlan-Bolayev/captcha](https://github.com/Nurlan-Bolayev/captcha.git)
 3. Type `code .` (open in vscode)
 4. Press `ctrl + '` to open terminal
 5. Type `powershell`
