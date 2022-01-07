@@ -1,0 +1,30 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      button:hover {
+        cursor: pointer;
+        color: white;
+        background-color: green;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body style="background-color: rgb(151, 216, 213);">
+    <div style="height: 200px;margin-left: 45%;margin-top: 300px;">
+      <div style="font-weight: bold;font-size: 60px;left: 30px;">Satışa başla</div>
+      <button id="button" style="margin-top: 20px;font-size: 20px;">Başla</button>
+    </div>
+    <script>
+      let b = document.getElementById("button");
+      document.body.onload = console.log(b);
+      b.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "{{ url_for('to_captcha_form') }}";
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .captcha {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        row-gap: 10px;
+    }
+    .captcha button {
+        border-radius: 3px;
+        padding: 5px 10px 5px 10px;
+    }
+    .captcha button:hover {
+        color: white;
+        background-color: green;  
+        cursor: pointer;  
+    }
+    .search{
+        margin-top: 30px;
+    }
+    .search button {
+        border-radius: 5px;
+        padding: 5px 10px 5px 10px;
+    }
+    .search button:hover {
+        color: white;
+        background-color: green;  
+        cursor: pointer;  
+    }
+    .mertebe_secimi , .otaq_sayı , .temir_novu , .captcha {
+        margin-top: 30px;
+    }
+    .otaq_sayı > input:hover {
+        cursor: pointer;
+    }
+</style>
+<body>
+    <form action="">
+        <div class="bina_tipi">
+            <label for="doqquz">9 mərtəbəli
+            <input type="checkbox" class="type" name="doqquz">
+            <label for="oniki">12 mərtəbəli
+            <input type="checkbox" class="type" name="oniki">
+        </div>
+        <hr>
+        <div class="mertebe_secimi">
+            <h2>Mərtəbə seçimi</h2>
+            <select name="" id="">
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+                <option value="">4</option>
+                <option value="">5</option>
+                <option value="">6</option>
+                <option value="">7</option>
+                <option value="">8</option>
+                <option value="">9</option>
+                <option value="">10</option>
+                <option value="">11</option>
+                <option value="">12</option>  
+            </select>
+        </div>
+        <hr>
+        <div class="otaq_sayi">
+            <h2>Otaq sayı</h2>   
+            <label for="">1 otaqlı
+            <input type="checkbox" class="type">
+            <label for="">2 otaqlı
+            <input type="checkbox" class="type">
+            <label for="">3 otaqlı
+            <input type="checkbox" class="type">
+            <label for="">4 otaqlı
+            <input type="checkbox" class="type">
+            <label for="">5 otaqlı
+            <input type="checkbox" class="type">
+        </div>
+        <hr>
+        <div class="temir_novu">
+            <h2>Təmir növü</h2>
+            <label for="">1
+            <input type="checkbox" class="">
+            <label for="">2
+            <input type="checkbox" class="">
+        </div>
+        <hr>
+        <div class="captcha">
+            <input type="text" class="type" value = "{{ data }}" placeholder="Aşağıdakı kodu daxil edin">
+            <img src="../static/imgs/{{ filename }}" alt="" style="width: 400px;height: 150px;">
+            <button style="width: 50px;">Yenilə</button>
+        </div>
+        <hr>
+        <div class="search">
+            <button>Axtar</button>
+            <button>Yenidən</button>
+        </div>  
+    </form>
+</body>
+</html>

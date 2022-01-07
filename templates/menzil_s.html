@@ -1,0 +1,198 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .layihe,
+      .odenis_usulu,
+      .menzil_secimi_usulu,
+      .captcha-section {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        column-gap: 30px;
+      }
+      .layihe {
+          column-gap: 45px;
+      }
+      .odenis_usulu .secimler > span:hover {
+        cursor: pointer;
+        background-color: green;
+        color: white;
+      }
+      .odenis_usulu .ipoteka-info {
+        border-radius: 5px;
+        background-color: rgb(32, 137, 178);
+        padding: 10px;
+        color: white;
+        width: auto;
+        min-height: 100px;
+      }
+
+      .secimler > input {
+          display: flex;
+          flex-direction: row;
+          column-gap: 10px;
+          align-items: center;
+
+      }
+      .menzil_secimi_usulu > div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        column-gap: 10px;
+      }
+      .menzil_secimi_usulu > div > div {
+        align-self: center;
+        border: 1px solid green;
+        border-radius: 3px;
+        padding: 5px;
+      }
+      .menzil_secimi_usulu > div > div:hover {
+        cursor: pointer;
+        background-color: green;
+        color: white;
+      }
+
+      .layihe select {
+        align-self: center;
+        border-radius: 3px;
+      }
+      .layihe select option:hover {
+        cursor: pointer;
+        background-color: green;
+        color: white;
+      }
+      .captcha-section > div{
+          align-self: center;
+          display: flex;
+          flex-direction: column;
+          row-gap: 10px;
+      }
+      .captcha-section > div > h2 {
+          padding: 10px 0 10px 0;
+      }
+      .captcha-section > div > input {
+        padding:5px 10px 5px 10px;
+      }
+      .captcha-section .button {
+          padding: 5px;
+      }
+      .captcha-section .button:hover {
+            cursor: pointer;
+            background-color: green;
+            color : white;
+            text-decoration: none;
+      }
+      .captcha-section .button:hover a {
+          color: white;
+      }
+      
+      .captcha-section .button > a {
+            text-decoration: none;
+
+      }
+      .captcha-section .button > a:hover {
+         color: white;
+         text-decoration: none;
+
+      }
+
+      .pagination > button {
+            padding: 5px;
+            margin : 0 5px 0 5px;
+            padding: 5px 10px 5px 10px;
+      }
+      .pagination > button:hover {
+          color: white;
+          background-color: green;
+          cursor: pointer;
+          border-radius: 5px;
+      }
+      
+
+    </style>
+  </head>
+  <body>
+    <form action="{{ url_for('captcha_form_s') }}" method = 'get'>
+      <div class="odenis_usulu">
+        <h2>Ödəniş üsulu</h2>
+        <div class="secimler">
+          <input type="checkbox" name="oz_vesaiti">Öz vəsaiti hesabına</input>
+          <input type="checkbox" name="ipoteka">İpoteka krediti hesabına</input>
+          <div class="info">
+            <div class="icon"><i class="fal fa-info-circle"></i></div>
+            <div>
+              <h3 style="font-weight: bold">İpoteka krediti</h3>
+              <div class="ipoteka-info">
+                Azərbaycan Respublikası İpoteka və Kredit Zəmanət Fondunun
+                güzəştli ipoteka krediti (3 ildən 30 ilədək müddətindəç 4 %
+                illik)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menzil_secimi_usulu">
+        <h2>Mənzil seçimi üsulu</h2>
+        <div>
+          <label for="">Xəritə üzərində</label>
+          <input type="checkbox" name="xerite">
+          <label for="">Parametrlə</label>
+          <input type="checkbox" name="parametr">
+          <label for="">Ünvan üzrə</label>
+          <input type="checkbox" name="unvan">
+        </div>
+      </div>
+
+      <div class="layihe">
+        <h2>Layihə</h2>
+        <select name="layihe">
+          <option name="" id="">Komfort Həyat</option>
+          <option name="" id="">Dreamland Golf Villas</option>
+          <option name="" id="">East Park</option>
+          <option name="" id="">Grand Plaza</option>
+          <option name="" id="">Olympus Botanic Garden</option>
+          <option name="" id="">Baku City Residence</option>
+          <option name="" id="">Majestic Palace</option>
+          <option name="" id="">Whitestone Towers</option>
+          <option name="" id="">LightHouse at Sea Breeze Resort</option>
+        </select>
+      </div>
+
+      <div class="captcha-section">
+        <h2>Captcha</h2>
+        <div>
+            <input type="text" value="{{ data }}" placeholder="Aşağıdakı kodu daxil edin" name="captcha_code"/>
+            <div class="captcha_code">
+                <img
+                src="../static/imgs/{{filename}}"
+              style="width: 400px; height: 150px"
+              alt=""
+            />
+          </div>
+          <button style="width: 50px;" class="button"><a href="">Yenilə</a></button>
+        </div>
+      </div>
+
+
+      <hr />
+      <div class="pagination">
+        <button>Əvvəlki</button>
+        <button id= "novbeti" class="novbeti">Novbeti</button>
+      </div>
+    </form>    
+      <script>
+        
+        let b = document.getElementById('novbeti')
+        b.addEventListener('click', (e) => {
+        e.preventDefault()
+        window.location.href = "{{ url_for('captcha_form_s') }}"
+        })
+        
+      </script>
+  </body>
+</html>
