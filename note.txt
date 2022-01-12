@@ -1,3 +1,15 @@
+# if not json_data['answer'] :
+                #     time.sleep(4)
+                #     self.request_detail['answer_is_null'] = True
+                #     xy = True
+                #     # Show result on the page and refresh every 4 minutes
+                #     print(self.print())
+                #     return self.post_()
+                # elif json_data['answer'] :
+                #     self.request_detail['answer_is_null'] = False
+                #     return render_template('menzil_s.html', data = json_data['answer'])
+
+from re import I
 from flask import Flask
 from flask import render_template
 from flask import request, redirect
@@ -22,7 +34,6 @@ def home():
 
 @app.route('/captcha-final', methods=['post', 'get'])
 def captcha_form_s():
-    print('it is the start of captcha final')
     r = random.randint(0, len(os.listdir('static/imgs'))-1)
     filename = os.listdir('static/imgs')[r]
     base64encoded_img_file = ''
@@ -30,16 +41,14 @@ def captcha_form_s():
         base64encoded_img_file = base64.b64encode(img_file.read())
 
     encoded_message = base64encoded_img_file.decode('utf-8')
+
     
-    app.config['no_answer'] = True
     
-    print('inside captcha_final')
     class CheckCap:
         def __str__(self) -> str:
             return 'check__captcha'
 
         def __init__(self):
-            print('initialized captcha class')
             self.base64encoded_img = encoded_message
             self.get_url = 'https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/get_answer/'
             self.post_url = 'https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add'
@@ -82,8 +91,8 @@ def captcha_form_s():
             return self.post_()
 
         def get_(self, captcha_id=None):
-            print('I am in the get request')
-            
+            print('this is a get request')
+            print(captcha_id)
             if not captcha_id:
                 return
             else:
@@ -95,16 +104,11 @@ def captcha_form_s():
                 json_data = r.json()
                 self.to_print_get_ = json_data
                 self.get_request_.update(json_data)
-                d = 'Null' if self.not_a_valid_token (json_data['answer']) else json_data['answer']
-                app.config['no_answer'] = True if self.not_a_valid_token(json_data['answer']) else False
-                if self.not_a_valid_token(json_data['answer']) :
-                    print('after checking token validity')
-                    return render_template('menzil_form.html', data=d, filename=filename)
-                
-                 
-                print('after fetching image')
+                d = 'Null' if not json_data['answer'] else json_data['answer']
+                return render_template('menzil_s.html', data=d, filename=filename)
+
         def post_(self):
-            print('I \' in the post request')
+            print('this is a post request')
             r = requests.post(url='https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add',  headers={
                               "Content-Type": "application/json", "Token": app.config.get('captcha_token')}, json={"base64": "TEpXNDJF", "captcha": "LJW42E"})
             self.post_request_['request_count'] += 1
@@ -127,7 +131,6 @@ def captcha_form_s():
                 return self.get_(captcha_id)
         
         def set_token(self):
-            print('I\'m in the set token function')
             if not app.config.get('captcha_token') :
                  r = requests.post(url = self.token_url, json=self.token_request_body) 
                  json_data = r.json()
@@ -142,19 +145,12 @@ def captcha_form_s():
                      json_data = r.json()
                      app.config['captcha_token_settime'] = datetime.datetime.today().now()
                      app.config['captcha_token'] = json_data['token']
-                 return [app.config['captcha_token_settime']]
-                     
-                     
-    if app.config.get('no_answer') :
-        print('ccccccccccccccccccccc')
-        check_cap = CheckCap()
-        print(' calling start method')
-        return check_cap.start()
+    check_cap = CheckCap()
+    return check_cap.start()
 
 
 @app.route('/to_captcha_form')
 def to_captcha_form():
-    print('it is the start of captcha form')
     r = random.randint(0, len(os.listdir('static/imgs'))-1)
     filename = os.listdir('static/imgs')[r]
     base64encoded_img_file = ''
@@ -164,7 +160,7 @@ def to_captcha_form():
     encoded_message = base64encoded_img_file.decode('utf-8')
 
     
-    app.config['no_answer'] = True
+
 
     class CheckCap:
         def __str__(self) -> str:
@@ -178,6 +174,7 @@ def to_captcha_form():
             }
             self.captcha_token_settime = ''
             self.set_token()
+            print('Initialized')
             self.headers = dict()
             self.headers["Content-Type"] = "application/json"
             self.headers["Token"] = app.config.get('captcha_token')
@@ -208,7 +205,6 @@ def to_captcha_form():
             return self.post_()
         
         def set_token(self):
-            print('I\'m in the set token function')
             if not app.config.get('captcha_token') :
                  r = requests.post(url = self.token_url, json=self.token_request_body) 
                  json_data = r.json()
@@ -217,6 +213,8 @@ def to_captcha_form():
                  
             else :
                  now = datetime.datetime.now()
+                 print(now)
+                 print(app.config['captcha_token_settime'])
                  time_diff = (now - app.config['captcha_token_settime'])
                  time_diff = time_diff.total_seconds()
                  time_diff = time_diff * 1/3600
@@ -227,14 +225,9 @@ def to_captcha_form():
                      app.config['captcha_token_settime'] = datetime.datetime.today().now()
             return [app.config['captcha_token_settime']]
         
-        def not_a_valid_token(self, token):
-            if token == 'no answer' or not token or len(token) != 6:
-                return True
-            else:
-                return False
-        
         def get_(self, captcha_id=None):
-            print('I am in the get request')
+            print('this is a get request')
+            print(captcha_id)
             
             
             if not captcha_id:
@@ -248,18 +241,11 @@ def to_captcha_form():
                 json_data = r.json()
                 self.to_print_get_ = json_data
                 self.get_request_.update(json_data)
-                d = 'Null' if self.not_a_valid_token (json_data['answer']) else json_data['answer']
-                app.config['no_answer'] = True if self.not_a_valid_token(json_data['answer']) else False
-                
-                if self.not_a_valid_token(json_data['answer']) : 
-                   print('after checking token validity')
-                   time.sleep(10) 
-                   return render_template('menzil_s.html', data=d, filename=filename)
-                else :
-                    return render_template('menzil_form.html', data = d, filename = filename)
+                d = 'Null' if not json_data['answer'] else json_data['answer']
+                return render_template('menzil_s.html', data=d, filename=filename)
 
         def post_(self):
-            print('I\'m in the post request')
+            print('this is a post request')
            
             r = requests.post(url='https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add',  headers={
                               "Content-Type": "application/json", "Token": app.config.get('captcha_token')}, json={"base64": "TEpXNDJF", "captcha": "LJW42E"})
@@ -284,11 +270,9 @@ def to_captcha_form():
 
         
                      
-    print('Initializing captcha class in to captcha form')
-    if app.config.get('no_answer') :
-        print('123412343124')
-        check_cap = CheckCap()
-        print('calling start function')
-        return check_cap.start()
+
+    check_cap = CheckCap()
+    return check_cap.start()
+
 
 app.run(debug=True)
