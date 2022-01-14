@@ -32,7 +32,7 @@ def captcha_form_s():
     encoded_message = base64encoded_img_file.decode('utf-8')
     
     app.config['no_answer'] = True
-    
+    app.config['json'] = {"base64": "TEpXNDJF", "captcha": "LJW42E"}
     print('inside captcha_final')
     class CheckCap:
         def __str__(self) -> str:
@@ -99,7 +99,9 @@ def captcha_form_s():
                 app.config['no_answer'] = True if self.not_a_valid_token(json_data['answer']) else False
                 if self.not_a_valid_token(json_data['answer']) :
                     print('after checking token validity')
-                    return render_template('menzil_form.html', data=d, filename=filename)
+                    time.sleep(1)
+                    # self.post_()
+                    return render_template('menzil_form.html', data=d, filename=filename, token = app.config.get('captcha_token'))
                 
                  
                 print('after fetching image')
@@ -165,7 +167,8 @@ def to_captcha_form():
 
     
     app.config['no_answer'] = True
-
+    app.config['post_count'] = 0
+    app.config['json'] = {"base64": "TEpXNDJF", "captcha": "LJW42E"}
     class CheckCap:
         def __str__(self) -> str:
             return 'check__captcha'
@@ -178,6 +181,7 @@ def to_captcha_form():
             }
             self.captcha_token_settime = ''
             self.set_token()
+            print(app.config['captcha_token'])
             self.headers = dict()
             self.headers["Content-Type"] = "application/json"
             self.headers["Token"] = app.config.get('captcha_token')
@@ -205,6 +209,8 @@ def to_captcha_form():
             return [self.to_print_get_, self.to_print_post_]
 
         def start(self):
+            print('start function inside to cap')
+            print(app.config['post_count'])
             return self.post_()
         
         def set_token(self):
@@ -232,7 +238,8 @@ def to_captcha_form():
                 return True
             else:
                 return False
-        
+        def render_template(self) :
+            return render_template('menzil_s.html', data=app.config['d'], filename=filename)
         def get_(self, captcha_id=None):
             print('I am in the get request')
             
@@ -243,24 +250,28 @@ def to_captcha_form():
                 r = requests.get(url=self.get_url + captcha_id,
                                  headers=self.headers, params={})
 
+                
                 self.get_request_['request_count'] += 1
                 self.get_request_['is_succesful'] = True
                 json_data = r.json()
                 self.to_print_get_ = json_data
                 self.get_request_.update(json_data)
                 d = 'Null' if self.not_a_valid_token (json_data['answer']) else json_data['answer']
+                app.config['d'] = d 
                 app.config['no_answer'] = True if self.not_a_valid_token(json_data['answer']) else False
                 
                 if self.not_a_valid_token(json_data['answer']) : 
                    print('after checking token validity')
-                   time.sleep(10) 
-                   return render_template('menzil_s.html', data=d, filename=filename)
+                   time.sleep(1)
+                #    self.post_()
+                   return render_template('menzil_s.html', data=d, filename=filename, token = app.config.get('captcha_token'))
+                   
                 else :
-                    return render_template('menzil_form.html', data = d, filename = filename)
+                    return render_template('menzil_fo.html', data = d, filename = filename)
 
         def post_(self):
+            
             print('I\'m in the post request')
-           
             r = requests.post(url='https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add',  headers={
                               "Content-Type": "application/json", "Token": app.config.get('captcha_token')}, json={"base64": "TEpXNDJF", "captcha": "LJW42E"})
             self.post_request_['request_count'] += 1

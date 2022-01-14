@@ -3,7 +3,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="10">
     <title>Document</title>
 </head>
 <style>
@@ -91,7 +90,7 @@
         </div>
         <hr>
         <div class="captcha">
-            <input type="text" class="type" value = "{{ data }}" placeholder="Aşağıdakı kodu daxil edin">
+            <input id="captcha_code" type="text" class="type" value = "{{ data }}" placeholder="Aşağıdakı kodu daxil edin">
             <img src="../static/imgs/{{ filename }}" alt="" style="width: 400px;height: 150px;">
             <button style="width: 50px;">Yenilə</button>
         </div>
@@ -100,9 +99,75 @@
             <button>Axtar</button>
             <button>Yenidən</button>
         </div>  
+        <div class="hidden">
+            <input type="hidden" id = "token" value="{{ token }}">
+        </div>
     </form>
     <script>
-         
+         document.body.onload = (e) => {
+          e.preventDefault()
+          let token = document.getElementById('token').value
+          let captcha_code = document.getElementById('captcha_code').value
+          let captcha_id = ''
+
+          async function fetch_captcha_code_post(url, body, method, token){
+              const response_ = await fetch(url , {
+
+                method : method,
+                body : JSON.stringify(body),
+                headers : {
+                  'Content-Type' : 'application/json',
+                  'Token' : token
+                }
+              
+
+              })
+              return response_.json() 
+
+            }
+
+          async function fetch_captcha_code_get(url, method, token){
+              const response_ = await fetch(url , {
+
+                method : method,
+                headers : {
+                  'Content-Type' : 'application/json',
+                  'Token' : token
+                }
+              
+
+              })
+              return response_.json() 
+
+            }
+            
+            function process (){
+              const post_req = fetch_captcha_code_post('https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add', {"base64": "TEpXNDJF", "captcha": "LJW42E"} , 'post' , token)
+              post_req.then(data => {
+                console.log(post_req);
+                const get_req = fetch_captcha_code_get('https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/get_answer/' + data['captcha_id'] , 'get' , token)
+                get_req.then(data => {
+                  if (data['answer'] == 'no_answer'){
+                  setTimeout(() => {
+                    console.log('requesting captcha');
+                    process()
+                  }, 1000);
+              }
+                  else {
+                  document.getElementById('captcha_code').value = data['answer']
+                  return
+                 }
+                })
+              })
+              
+              
+            }
+
+          if(captcha_code == 'Null') {
+              process()
+          }
+
+          }
     </script>
 </body>
 </html>
