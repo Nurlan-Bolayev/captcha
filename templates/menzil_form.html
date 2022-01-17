@@ -101,6 +101,7 @@
         </div>  
         <div class="hidden">
             <input type="hidden" id = "token" value="{{ token }}">
+            <input type="hidden" id = "body" value="{{ body }}">
         </div>
     </form>
     <script>
@@ -109,7 +110,7 @@
           let token = document.getElementById('token').value
           let captcha_code = document.getElementById('captcha_code').value
           let captcha_id = ''
-
+          let body = document.getElementById('body').value  
           async function fetch_captcha_code_post(url, body, method, token){
               const response_ = await fetch(url , {
 
@@ -142,7 +143,7 @@
             }
             
             function process (){
-              const post_req = fetch_captcha_code_post('https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add', {"base64": "TEpXNDJF", "captcha": "LJW42E"} , 'post' , token)
+              const post_req = fetch_captcha_code_post('https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add', {"base64": body, "captcha": "LJW42E"} , 'post' , token)
               post_req.then(data => {
                 console.log(post_req);
                 const get_req = fetch_captcha_code_get('https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/get_answer/' + data['captcha_id'] , 'get' , token)

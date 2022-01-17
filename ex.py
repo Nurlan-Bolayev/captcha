@@ -103,14 +103,14 @@ def captcha_form_s():
                     print('after checking token validity')
                     time.sleep(1)
                     # self.post_()
-                    return render_template('menzil_form.html', data=d, filename=filename, token=app.config.get('captcha_token'))
+                    return render_template('menzil_form.html', data=d, filename=filename, token=app.config.get('captcha_token'), body = self.base64encoded_img)
 
                 print('after fetching image')
 
         def post_(self):
             print('I \' in the post request')
             r = requests.post(url='https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add',  headers={
-                              "Content-Type": "application/json", "Token": app.config.get('captcha_token')}, json={"base64": "TEpXNDJF", "captcha": "LJW42E"})
+                              "Content-Type": "application/json", "Token": app.config.get('captcha_token')}, json={"base64": self.base64encoded_img, "captcha": "LJW42E"})
             self.post_request_['request_count'] += 1
             json_data = r.json()
             self.to_print_post_ = json_data
@@ -274,7 +274,7 @@ def to_captcha_form():
                     print('after checking token validity')
                     time.sleep(1)
                 #    self.post_()
-                    return render_template('menzil_s.html', data=d, filename=filename, token=app.config.get('captcha_token'))
+                    return render_template('menzil_s.html', data=d, filename=filename, token=app.config.get('captcha_token'), body=self.base64encoded_img)
 
                 else:
                     return render_template('menzil_fo.html', data=d, filename=filename)
@@ -283,7 +283,7 @@ def to_captcha_form():
 
             print('I\'m in the post request')
             r = requests.post(url='https://captcha-api-qfegkg7fda-ew.a.run.app/api/v1/captchas/add',  headers={
-                              "Content-Type": "application/json", "Token": app.config.get('captcha_token')}, json={"base64": "TEpXNDJF", "captcha": "LJW42E"})
+                              "Content-Type": "application/json", "Token": app.config.get('captcha_token')}, json={"base64": self.base64encoded_img, "captcha": "LJW42E"})
             self.post_request_['request_count'] += 1
             json_data = r.json()
             self.to_print_post_ = json_data
