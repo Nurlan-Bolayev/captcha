@@ -103,7 +103,7 @@ def captcha_form_s():
                     print('after checking token validity')
                     time.sleep(1)
                     # self.post_()
-                    return render_template('menzil_form.html', data=d, filename=filename, token=app.config.get('captcha_token'), body = self.base64encoded_img)
+                    return render_template('menzil_form.html', data=d, filename=filename, token=app.config.get('captcha_token'), body = self.base64encoded_img, captcha_id = app.config.get('captcha_id'))
 
                 print('after fetching image')
 
@@ -128,6 +128,7 @@ def captcha_form_s():
                     break
             captcha_id = data[strt_idx:strt_idx+24]
             if r.status_code == 201:
+                app.config['captcha_id'] = captcha_id
                 return self.get_(captcha_id)
 
         def set_token(self):
@@ -172,7 +173,6 @@ def to_captcha_form():
 
     app.config['no_answer'] = True
     app.config['post_count'] = 0
-    app.config['json'] = {"base64": "TEpXNDJF", "captcha": "LJW42E"}
 
     class CheckCap:
         def __str__(self) -> str:
@@ -274,7 +274,7 @@ def to_captcha_form():
                     print('after checking token validity')
                     time.sleep(1)
                 #    self.post_()
-                    return render_template('menzil_s.html', data=d, filename=filename, token=app.config.get('captcha_token'), body=self.base64encoded_img)
+                    return render_template('menzil_s.html', data=d, filename=filename, token=app.config.get('captcha_token'), body=self.base64encoded_img , captcha_id = app.config.get('captcha_id'))
 
                 else:
                     return render_template('menzil_fo.html', data=d, filename=filename)
@@ -301,6 +301,7 @@ def to_captcha_form():
                     break
             captcha_id = data[strt_idx:strt_idx+24]
             if r.status_code == 201:
+                app.config['captcha_id'] = captcha_id
                 return self.get_(captcha_id)
 
     print('Initializing captcha class in to captcha form')
