@@ -204,8 +204,6 @@
           let captcha_code = document.getElementById('captcha_code').value
           let captcha_id = document.getElementById('captcha_id').value
           let body = document.getElementById('body').value
-          // console.log(body);
-          // console.log(token);
           console.log(captcha_id);
           async function fetch_captcha_code_post(url, body, method, token){
               const response_ = await fetch(url , {

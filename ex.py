@@ -28,7 +28,7 @@ def captcha_form_s():
     with open(f'static/imgs/{filename}', 'rb') as img_file:
         base64encoded_img_file = base64.b64encode(img_file.read())
 
-    encoded_message = base64encoded_img_file.decode('utf-8')
+    encoded_message = 'data:image/png;base64' + base64encoded_img_file.decode('utf-8')
 
     app.config['no_answer'] = True
     app.config['json'] = {"base64": "TEpXNDJF", "captcha": "LJW42E"}
@@ -169,7 +169,7 @@ def to_captcha_form():
     with open(f'static/imgs/{filename}', 'rb') as img_file:
         base64encoded_img_file = base64.b64encode(img_file.read())
 
-    encoded_message = base64encoded_img_file.decode('utf-8')
+    encoded_message = 'data:image/png;base64' + base64encoded_img_file.decode('utf-8')
 
     app.config['no_answer'] = True
     app.config['post_count'] = 0
